@@ -35,8 +35,8 @@ def sentiment_score(review):
 if __name__ == '__main__':
     st.write("""
     # Sentiment Analysis Web Application
-    *The star ratings are out of a possible 5 star where 1 is most negative and 5 as most positive review
+    *The star ratings are out of a possible 5 star where 1 is most negative and 5 as most positive review*
     """)
     df['STAR RATING'] = df['CUSTOMER REVIEW'].apply(lambda x: sentiment_score(x[:512]))
-    df.set_index('CUSTOMER REVIEW')
+    df.set_index('STAR RATING')
     st.table(df)
