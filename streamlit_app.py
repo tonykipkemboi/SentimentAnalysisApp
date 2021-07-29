@@ -22,7 +22,7 @@ regex = re.compile('.*comment.*')
 results = soup.find_all('p', {'class': regex})
 reviews = [result.text for result in results]
 
-df = pd.DataFrame(np.array(reviews), columns=['review'])
+df = pd.DataFrame(np.array(reviews), columns=['CUSTOMER REVIEW'])
 
 
 def sentiment_score(review):
@@ -33,5 +33,5 @@ def sentiment_score(review):
 
 # Press the green button in the gutter to run the script
 if __name__ == '__main__':
-    df['sentiment'] = df['review'].apply(lambda x: sentiment_score(x[:512]))
+    df['STAR RATING'] = df['CUSTOMER REVIEW'].apply(lambda x: sentiment_score(x[:512]))
     st.table(df)
