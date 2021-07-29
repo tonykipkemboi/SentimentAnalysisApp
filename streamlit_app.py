@@ -16,7 +16,7 @@ model = AutoModelForSequenceClassification.from_pretrained('nlptown/bert-base-mu
 tokens = tokenizer.encode('love', return_tensors='pt')
 result = model(tokens)
 
-r = requests.get('https://www.yelp.com/biz/embassy-of-kenya-washington')
+r = requests.get('https://www.yelp.com/biz/swahili-village-beltsville-6')
 soup = BeautifulSoup(r.text, 'html.parser')
 regex = re.compile('.*comment.*')
 results = soup.find_all('p', {'class': regex})
@@ -33,5 +33,6 @@ def sentiment_score(review):
 
 # Press the green button in the gutter to run the script
 if __name__ == '__main__':
+    st.write.
     df['STAR RATING'] = df['CUSTOMER REVIEW'].apply(lambda x: sentiment_score(x[:512]))
     st.table(df)
