@@ -16,7 +16,9 @@ model = AutoModelForSequenceClassification.from_pretrained('nlptown/bert-base-mu
 tokens = tokenizer.encode('love', return_tensors='pt')
 result = model(tokens)
 
-r = requests.get('https://www.yelp.com/biz/swahili-village-beltsville-6')
+# example path: 'https://www.yelp.com/biz/swahili-village-beltsville-6'
+path = st.text_input('Yelp review site URL')
+r = requests.get(path)
 soup = BeautifulSoup(r.text, 'html.parser')
 regex = re.compile('.*comment.*')
 results = soup.find_all('p', {'class': regex})
