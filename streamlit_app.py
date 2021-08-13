@@ -63,9 +63,7 @@ def get_table_download_link(dfm):
 
 
 if __name__ == '__main__':
-    """
-    Execute
-    """
+    
     st.header('Yelp Reviews Sentiment Analysis WebApp 👨‍💻')
     st.caption('The reviews and sentiment scores will be displayed below')
 
