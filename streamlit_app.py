@@ -1,4 +1,8 @@
 # Import dependencies
+import base64
+from io import BytesIO
+from xlsxwriter import Workbook
+
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
 import requests
@@ -16,29 +20,77 @@ model = AutoModelForSequenceClassification.from_pretrained('nlptown/bert-base-mu
 tokens = tokenizer.encode('love', return_tensors='pt')
 result = model(tokens)
 
-# example path: 'https://www.yelp.com/biz/swahili-village-beltsville-6'
-path = st.text_input('Yelp review site URL')
-r = requests.get(path)
-soup = BeautifulSoup(r.text, 'html.parser')
-regex = re.compile('.*comment.*')
-results = soup.find_all('p', {'class': regex})
-reviews = [result.text for result in results]
 
-df = pd.DataFrame(np.array(reviews), columns=['CUSTOMER REVIEW'])
-
-
+@st.cache  # this function will be cached
 def sentiment_score(review):
+    """
+    :param review:
+    :type review:
+    :return:
+    :rtype:
+    """
     tok = tokenizer.encode(review, return_tensors='pt')
     res = model(tok)
     return int(torch.argmax(res.logits)) + 1
 
 
-# Press the green button in the gutter to run the script
+def to_excel(dfs):
+    """
+    :param dfs:
+    :type dfs:
+    :return:
+    :rtype:
+    """
+    output = BytesIO()
+    writer = pd.ExcelWriter(output, engine='xlsxwriter')
+    df.to_excel(writer, sheet_name='Sheet1')
+    writer.save()
+    processed_data = output.getvalue()
+    return processed_data
+
+
+def get_table_download_link(dfm):
+    """
+    :param dfm:
+    :type dfm:
+    :return:
+    :rtype:
+    """
+    val = to_excel(df)
+    b64 = base64.b64encode(val)
+    return f'<a href="data:application/octect-stream;base64,{b64.decode()}" download="extract.xlsx">Download Excel ' \
+           f'File</a> '
+
+
 if __name__ == '__main__':
-    st.write("""
-    # Sentiment Analysis Web Application
-    *The star ratings are out of a possible 5 star where 1 is most negative and 5 as most positive review*
-    """)
-    df['STAR RATING'] = df['CUSTOMER REVIEW'].apply(lambda x: sentiment_score(x[:512]))
-    df.set_index('STAR RATING')
+    """
+    Execute
+    """
+    st.header('Yelp Reviews Sentiment Analysis WebApp 👨‍💻')
+    st.caption('The reviews and sentiment scores will be displayed below')
+
+    with st.sidebar.form(key='my_form'):
+        path = st.text_input('Enter Yelp review site URL', key='url')
+        store_url = st.session_state.url
+        submit_button = st.form_submit_button(label='Submit')
+
+    # path = st.text_input('Yelp review site URL')
+    r = requests.get(path)
+    soup = BeautifulSoup(r.text, 'html.parser')
+    regex = re.compile('.*comment.*')
+    results = soup.find_all('p', {'class': regex})
+    reviews = [result.text for result in results]
+
+    df = pd.DataFrame(np.array(reviews), columns=['CUSTOMER REVIEW'])
+    df['SENTIMENT SCORE'] = df['CUSTOMER REVIEW'].apply(lambda x: sentiment_score(x[:512]))
+    score = df['SENTIMENT SCORE'].mean()
+    num_rev = df['CUSTOMER REVIEW'].count()
+    df.set_index('SENTIMENT SCORE')
+
+    # display sentiment table
+    st.write('Establishment Site URL: ', store_url)
     st.table(df)
+    st.subheader('Sentiment Analysis Stats:')
+    st.write('Number of Reviews: ', num_rev)
+    st.write('Mean Sentiment Score: ', score, ' out of 5!')
+    st.markdown(get_table_download_link(df), unsafe_allow_html=True)
