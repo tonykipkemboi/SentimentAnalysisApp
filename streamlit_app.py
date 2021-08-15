@@ -24,10 +24,10 @@ result = model(tokens)
 @st.cache  # this function will be cached
 def sentiment_score(review):
     """
-    :param review:
-    :type review:
-    :return:
-    :rtype:
+    :param review:@review
+    :type review:string
+    :return:sentiment score
+    :rtype:int
     """
     tok = tokenizer.encode(review, return_tensors='pt')
     res = model(tok)
@@ -36,10 +36,10 @@ def sentiment_score(review):
 
 def to_excel(dfs):
     """
-    :param dfs:
-    :type dfs:
-    :return:
-    :rtype:
+    :param dfs:dataframe
+    :type dfs:dataframe
+    :return:df
+    :rtype:df
     """
     output = BytesIO()
     writer = pd.ExcelWriter(output, engine='xlsxwriter')
@@ -51,10 +51,10 @@ def to_excel(dfs):
 
 def get_table_download_link(dfm):
     """
-    :param dfm:
-    :type dfm:
-    :return:
-    :rtype:
+    :param dfm:df
+    :type dfm:df
+    :return:xlsx
+    :rtype:excel file
     """
     val = to_excel(df)
     b64 = base64.b64encode(val)
@@ -63,10 +63,11 @@ def get_table_download_link(dfm):
 
 
 if __name__ == '__main__':
-    
+    st.sidebar.image("rev.png", use_column_width=True)
     st.header('Yelp Reviews Sentiment Analysis WebApp 👨‍💻')
     st.caption('The reviews and sentiment scores will be displayed below')
-
+    yelp = "https://www.yelp.com/"
+    st.sidebar.write("Link to Yelp: " + yelp)
     with st.sidebar.form(key='my_form'):
         path = st.text_input('Enter Yelp review site URL', key='url')
         store_url = st.session_state.url
@@ -85,7 +86,10 @@ if __name__ == '__main__':
     num_rev = df['CUSTOMER REVIEW'].count()
     df.set_index('SENTIMENT SCORE')
 
-    # display sentiment table
+    # display sentiment table page_bg_img = ''' <style> .stApp { background-image: url(
+    # "https://mir-s3-cdn-cf.behance.net/project_modules/2800_opt_1/551074124683183.61095df8205df.jpg");
+    # background-size: cover; } </style> ''' st.markdown(page_bg_img, unsafe_allow_html=True)
+
     st.write('Establishment Site URL: ', store_url)
     st.table(df)
     st.subheader('Sentiment Analysis Stats:')
