@@ -63,7 +63,7 @@ def get_table_download_link(dfm):
 
 
 if __name__ == '__main__':
-    st.sidebar.image("rev.png", use_column_width=True)
+    st.sidebar.image("assets/rev.png", use_column_width=True)
     st.header('Yelp Reviews Sentiment Analysis WebApp 👨‍💻')
     st.caption('The reviews and sentiment scores will be displayed below')
     yelp = "https://www.yelp.com/"
