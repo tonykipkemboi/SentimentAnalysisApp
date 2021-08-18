@@ -12,6 +12,13 @@ I am still exploring different use cases I can adapt to the app.
 
 This is for educational purposes only!
 
+## Usage
+Click the link this link to access the webapp and input a yelp business link for analysis:
+
+https://share.streamlit.io/tonykipkemboi/sentimentanalysisapp/main
+
+Also feel free to fork and tweak it to your liking.
+
 Enjoy :heart:
 
 ## Visual Demo
