@@ -17,6 +17,10 @@ Click the link this link to access the webapp and input a yelp business link for
 
 https://share.streamlit.io/tonykipkemboi/sentimentanalysisapp/main
 
+Warning: The site breaks after some time ...working on a stable solution.
+
+If you see an error message upon loading the main page, paste a Yelp URL on the left hand side text box and submit and you should see results!
+
 Also feel free to fork and tweak it to your liking.
 
 Enjoy :heart:
