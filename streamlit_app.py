@@ -74,25 +74,30 @@ if __name__ == '__main__':
         submit_button = st.form_submit_button(label='Submit')
 
     # path = st.text_input('Yelp review site URL')
-    r = requests.get(path)
-    soup = BeautifulSoup(r.text, 'html.parser')
-    regex = re.compile('.*comment.*')
-    results = soup.find_all('p', {'class': regex})
-    reviews = [result.text for result in results]
+    try:
+        r = requests.get(path)
+        soup = BeautifulSoup(r.text, 'html.parser')
+        regex = re.compile('.*comment.*')
+        results = soup.find_all('p', {'class': regex})
+        reviews = [result.text for result in results]
 
-    df = pd.DataFrame(np.array(reviews), columns=['CUSTOMER REVIEW'])
-    df['SENTIMENT SCORE'] = df['CUSTOMER REVIEW'].apply(lambda x: sentiment_score(x[:512]))
-    score = df['SENTIMENT SCORE'].mean()
-    num_rev = df['CUSTOMER REVIEW'].count()
-    df.set_index('SENTIMENT SCORE')
+        df = pd.DataFrame(np.array(reviews), columns=['CUSTOMER REVIEW'])
+        df['SENTIMENT SCORE'] = df['CUSTOMER REVIEW'].apply(lambda x: sentiment_score(x[:512]))
+        score = df['SENTIMENT SCORE'].mean()
+        num_rev = df['CUSTOMER REVIEW'].count()
+        df.set_index('SENTIMENT SCORE')
 
-    # display sentiment table page_bg_img = ''' <style> .stApp { background-image: url(
-    # "https://mir-s3-cdn-cf.behance.net/project_modules/2800_opt_1/551074124683183.61095df8205df.jpg");
-    # background-size: cover; } </style> ''' st.markdown(page_bg_img, unsafe_allow_html=True)
+        # display sentiment table page_bg_img = ''' <style> .stApp { background-image: url(
+        # "https://mir-s3-cdn-cf.behance.net/project_modules/2800_opt_1/551074124683183.61095df8205df.jpg");
+        # background-size: cover; } </style> ''' st.markdown(page_bg_img, unsafe_allow_html=True)
 
-    st.write('Establishment Site URL: ', store_url)
-    st.table(df)
-    st.subheader('Sentiment Analysis Stats:')
-    st.write('Number of Reviews: ', num_rev)
-    st.write('Mean Sentiment Score: ', score, ' out of 5!')
-    st.markdown(get_table_download_link(df), unsafe_allow_html=True)
+        st.write('Establishment Site URL: ', store_url)
+        st.table(df)
+        st.subheader('Sentiment Analysis Stats:')
+        st.write('Number of Reviews: ', num_rev)
+        st.write('Mean Sentiment Score: ', score, ' out of 5!')
+        st.markdown(get_table_download_link(df), unsafe_allow_html=True)
+    except:
+        pass
+
+    
