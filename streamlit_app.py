@@ -67,7 +67,9 @@ if __name__ == '__main__':
     st.header('Yelp Reviews Sentiment Analysis WebApp 👨‍💻')
     st.caption('The reviews and sentiment scores will be displayed below')
     yelp = "https://www.yelp.com/"
-    st.sidebar.write("Link to Yelp: " + yelp)
+    st.sidebar.write("Link to Yelp to find URL: " + yelp)
+    example_url = '"https://www.yelp.com/biz/panda-cafe-manassas?osq=Delivery'
+    st.sidebar.write("Here's an example you can use" + example_url)
     with st.sidebar.form(key='my_form'):
         path = st.text_input('Enter Yelp URL to analyze reviews', key='url')
         store_url = st.session_state.url
