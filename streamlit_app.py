@@ -69,7 +69,7 @@ if __name__ == '__main__':
     yelp = "https://www.yelp.com/"
     st.sidebar.write("Link to Yelp: " + yelp)
     with st.sidebar.form(key='my_form'):
-        path = st.text_input('Enter Yelp review site URL', key='url')
+        path = st.text_input('Enter Yelp URL to analyze reviews', key='url')
         store_url = st.session_state.url
         submit_button = st.form_submit_button(label='Submit')
 
